@@ -149,7 +149,7 @@ kubectl -n argo port-forward deployment/argo-server 2746:2746
 
 Now from Argo UI we must login in client mode and paste the previous token including the Bearer attribute:
 
-![Captura de pantalla 2024-02-25 a las 20.06.03.png](/.attachments/Captura%20de%20pantalla%202024-02-25%20a%20las%2020.06.03-bb939d94-9318-4f57-b27f-8fb37c3ec613.png)
+![Items](https://github.com/masalinas/poc-argo-workflow/assets/1216181/8e965ffb-e1d1-4063-b53e-105849abafc2)
 
 **STEP 05**: Install Argo CLI
 
@@ -236,4 +236,4 @@ curl --insecure -H "Authorization: $ARGO_TOKEN" https://localhost:2746/api/v1/wo
 
 The API documentation for this request can be check from the Argo UI like this:
 
-![Captura de pantalla 2024-03-02 a las 17.40.14.png](/.attachments/Captura%20de%20pantalla%202024-03-02%20a%20las%2017.40.14-ed6b0cee-2388-418e-97be-f5d01c384730.png)
+![Items (1)](https://github.com/masalinas/poc-argo-workflow/assets/1216181/304c0834-ffbc-4cd9-95b2-83074322b11d)
