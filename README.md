@@ -70,7 +70,7 @@ metadata:
 type: kubernetes.io/service-account-token
 EOF
 
-$ ARGO_TOKEN="Bearer $(kubectl get secret argo.service-account-token -o=jsonpath='{.data.token}' | base64 --decode)"
+$ ARGO_TOKEN="Bearer $(kubectl get secret -n argo argo.service-account-token -o=jsonpath='{.data.token}' | base64 --decode)"
 echo $ARGO_TOKEN
 
 ```
