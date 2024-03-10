@@ -75,6 +75,10 @@ echo $ARGO_TOKEN
 
 ```
 
+The result of this command only return the token. We must add the Bearer after the token like this:
+
+Bearer $ARGO_TOKEN
+
 **STEP 02**: Authentication server mode 
 
 If you want disable any authentication, we can set the authentication mode for Argo Workflows to "server" executing this command to patch the argo-server deployment:
