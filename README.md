@@ -77,7 +77,9 @@ echo $ARGO_TOKEN
 
 The result of this command only return the token. We must add the Bearer after the token like this:
 
+```
 Bearer $ARGO_TOKEN
+```
 
 **STEP 02**: Authentication server mode 
 
