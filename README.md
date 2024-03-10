@@ -4,7 +4,7 @@ Argo Workflows is an open source container-native workflow engine for orchestrat
 
 ## Deployment steps
 
-**STEP 01**: We can check the last argo workflow release from this link, previous to deployment:
+**STEP 01**: We can check the last argo workflows release from this link, previous to deployment:
 
 ```
 https://github.com/argoproj/argo-workflows/releases
