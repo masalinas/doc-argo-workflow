@@ -10,7 +10,7 @@ Argo Workflows is an open source container-native workflow engine for orchestrat
 https://github.com/argoproj/argo-workflows/releases
 ```
 
-Create the argo namespace first to deploy argo workflow resources inside
+Create the argo namespace first to deploy argo workflows resources inside
 
 ```
 $ kubectl create namespace argo
@@ -49,7 +49,7 @@ deployment.apps/workflow-controller created
 
 **STEP 02**: Authentication client mode 
 
-By default argo Workflows is deployed with the client mode authentication configured, so we need to authenticate with a token to access to any argo workflow resource. We can create one executing this command:
+By default argo Workflows is deployed with the client mode authentication configured, so we need to authenticate with a token to access to any argo workflows resource. We can create one executing this command:
 
 ```
 $ kubectl -n argo exec $(kubectl get pod -n argo -l 'app=argo-server' -o jsonpath='{.items[0].metadata.name}') -- argo auth token
@@ -100,7 +100,7 @@ $ kubectl create rolebinding default-admin --clusterrole=admin --serviceaccount=
 $  argo submit -n argo --watch https://raw.githubusercontent.com/argoproj/argo-workflows/main/examples/hello-world.yaml
 ```
 
-**Be carefoul to use this Argo workflow template in Mac ARM because not works for this architecture**. Use this one for example:
+**Be carefoul to use this Argo workflows template in Mac ARM because not works for this architecture**. Use this one for example:
 
 ```
 apiVersion: argoproj.io/v1alpha1
