@@ -230,7 +230,7 @@ STEP                  TEMPLATE  PODNAME            DURATION  MESSAGE
 First load the Bearer Token
 
 ```
-ARGO_TOKEN="Bearer $(kubectl get secret jenkins.service-account-token -o=jsonpath='{.data.token}' | base64 --decode)"
+ARGO_TOKEN="Bearer $(kubectl get secret -n argo argo.service-account-token -o=jsonpath='{.data.token}' | base64 --decode)"
 ```
 
 Now using the curl tool we can send request against the Argo Server. This requets is a Get to recover all 
