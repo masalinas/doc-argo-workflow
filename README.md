@@ -271,8 +271,16 @@ spec:
 
 Second submit this workflow template using the argo API REST like this
 
+Recover the Argo Token to authenticated executing this command 
+
+```
+ARGO_TOKEN="Bearer $(kubectl get secret -n argo argo.service-account-token -o=jsonpath='{.data.token}' | base64 --decode)"
+```
+
+Execute the curl submit REST request like this. 
 ```
 curl -X POST https://localhost:2746/api/v1/workflows/argo/submit --insecure -H "Authorization: $ARGO_TOKEN" -d '{"namespace": "argo", "resourceKind": "WorkflowTemplate", "resourceName": "arm-hello-world"}'
+
 {"metadata":{"name":"arm-hello-world-mrcbm","generateName":"arm-hello-world-","namespace":"argo","uid":"827d2664-1961-4d5c-8374-dd900cf9f675","resourceVersion":"481424","generation":1,"creationTimestamp":"2024-03-16T16:16:01Z","labels":{"workflows.argoproj.io/creator":"system-serviceaccount-argo-argo","workflows.argoproj.io/workflow-template":"arm-hello-world"},"managedFields":[{"manager":"argo","operation":"Update","apiVersion":"argoproj.io/v1alpha1","time":"2024-03-16T16:16:01Z","fieldsType":"FieldsV1","fieldsV1":{"f:metadata":{"f:generateName":{},"f:labels":{".":{},"f:workflows.argoproj.io/creator":{},"f:workflows.argoproj.io/workflow-template":{}}},"f:spec":{},"f:status":{}}}]},"spec":{"arguments":{},"workflowTemplateRef":{"name":"arm-hello-world"}},"status":{"startedAt":null,"finishedAt":null,"storedTemplates":{"namespaced/arm-hello-world/echotest":{"name":"echotest","inputs":{},"outputs":{},"metadata":{},"container":{"name":"","image":"alpine","command":["sh","-c"],"args":["echo","hello"],"resources":{}}}}}}
 ```
 
