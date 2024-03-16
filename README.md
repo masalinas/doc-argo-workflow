@@ -240,6 +240,44 @@ curl --insecure -H "Authorization: $ARGO_TOKEN" https://localhost:2746/api/v1/wo
 {"metadata":{"resourceVersion":"281377"},"items":[{"metadata":{"name":"hello-world-84zvb","generateName":"hello-world-","namespace":"argo","uid":"47e50feb-e293-4820-816d-f54b6c8632b8","resourceVersion":"276477","generation":3,"creationTimestamp":"2024-02-25T20:23:52Z","labels":{"workflows.argoproj.io/completed":"true","workflows.argoproj.io/phase":"Succeeded"},"annotations":{"workflows.argoproj.io/pod-name-format":"v2"},"managedFields":[{"manager":"argo","operation":"Update","apiVersion":"argoproj.io/v1alpha1","time":"2024-02-25T20:23:52Z","fieldsType":"FieldsV1","fieldsV1":{"f:metadata":{"f:generateName":{}},"f:spec":{}}},{"manager":"workflow-controller","operation":"Update","apiVersion":"argoproj.io/v1alpha1","time":"2024-02-25T20:24:02Z","fieldsType":"FieldsV1","fieldsV1":{"f:metadata":{"f:annotations":{".":{},"f:workflows.argoproj.io/pod-name-format":{}},"f:labels":{".":{},"f:workflows.argoproj.io/completed":{},"f:workflows.argoproj.io/phase":{}}},"f:status":{}}}]},"spec":{"templates":[{"name":"echotest","inputs":{},"outputs":{},"metadata":{},"container":{"name":"","image":"alpine","command":["sh","-c"],"args":["echo","hello"],"resources":{}}}],"entrypoint":"echotest","arguments":{}},"status":{"phase":"Succeeded","startedAt":"2024-02-25T20:23:52Z","finishedAt":"2024-02-25T20:24:02Z","progress":"1/1","nodes":{"hello-world-84zvb":{"id":"hello-world-84zvb","name":"hello-world-84zvb","displayName":"hello-world-84zvb","type":"Pod","templateName":"echotest","templateScope":"local/hello-world-84zvb","phase":"Succeeded","startedAt":"2024-02-25T20:23:52Z","finishedAt":"2024-02-25T20:23:56Z","progress":"1/1","resourcesDuration":{"cpu":4,"memory":4},"outputs":{"exitCode":"0"},"hostNodeName":"minikube"}},"conditions":[{"type":"PodRunning","status":"False"},{"type":"Completed","status":"True"}],"resourcesDuration":{"cpu":4,"memory":4},"artifactRepositoryRef":{"default":true,"artifactRepository":{}},"artifactGCStatus":{"notSpecified":true},"taskResultsCompletionStatus":{"hello-world-84zvb":true}}},{"metadata":{"name":"hello-world-cnq2g","generateName":"hello-world-","namespace":"argo","uid":"5f0767b5-856f-4c9b-97a7-01cd634b5792","resourceVersion":"276236","generation":3,"creationTimestamp":"2024-02-25T20:21:34Z","labels":{"workflows.argoproj.io/completed":"true","workflows.argoproj.io/creator":"system-serviceaccount-argo-argo","workflows.argoproj.io/phase":"Succeeded"},"annotations":{"workflows.argoproj.io/pod-name-format":"v2"},"managedFields":[{"manager":"argo","operation":"Update","apiVersion":"argoproj.io/v1alpha1","time":"2024-02-25T20:21:34Z","fieldsType":"FieldsV1","fieldsV1":{"f:metadata":{"f:generateName":{},"f:labels":{".":{},"f:workflows.argoproj.io/creator":{}}},"f:spec":{}}},{"manager":"workflow-controller","operation":"Update","apiVersion":"argoproj.io/v1alpha1","time":"2024-02-25T20:21:44Z","fieldsType":"FieldsV1","fieldsV1":{"f:metadata":{"f:annotations":{".":{},"f:workflows.argoproj.io/pod-name-format":{}},"f:labels":{"f:workflows.argoproj.io/completed":{},"f:workflows.argoproj.io/phase":{}}},"f:status":{}}}]},"spec":{"templates":[{"name":"echotest","inputs":{},"outputs":{},"metadata":{},"container":{"name":"","image":"alpine","command":["sh","-c"],"args":["echo","hello"],"resources":{}}}],"entrypoint":"echotest","arguments":{}},"status":{"phase":"Succeeded","startedAt":"2024-02-25T20:21:34Z","finishedAt":"2024-02-25T20:21:44Z","progress":"1/1","nodes":{"hello-world-cnq2g":{"id":"hello-world-cnq2g","name":"hello-world-cnq2g","displayName":"hello-world-cnq2g","type":"Pod","templateName":"echotest","templateScope":"local/hello-world-cnq2g","phase":"Succeeded","startedAt":"2024-02-25T20:21:34Z","finishedAt":"2024-02-25T20:21:38Z","progress":"1/1","resourcesDuration":{"cpu":4,"memory":4},"outputs":{"exitCode":"0"},"hostNodeName":"minikube"}},"conditions":[{"type":"PodRunning","status":"False"},{"type":"Completed","status":"True"}],"resourcesDuration":{"cpu":4,"memory":4},"artifactRepositoryRef":{"default":true,"artifactRepository":{}},"artifactGCStatus":{"notSpecified":true},"taskResultsCompletionStatus":{"hello-world-cnq2g":true}}}]}
 ```
 
+## Submit a workflow from a template creted in
+
+First create a workflow template in Argo
+
+```
+metadata:
+  name: arm-hello-world
+  namespace: argo
+  labels:
+    example: 'true'
+spec:
+  workflowMetadata:
+    labels:
+      example: 'true'
+  entrypoint: echotest
+  templates:
+    - name: echotest
+      container:
+        image: alpine
+        command: ["sh","-c"]
+        args: ["echo","hello"]
+  ttlStrategy:
+    secondsAfterCompletion: 300
+  podGC:
+    strategy: OnPodCompletion
+```
+
+![Captura de pantalla 2024-03-16 a las 17 23 20](https://github.com/masalinas/doc-argo-workflow/assets/1216181/780b6a02-fd18-459a-b39b-8effa9bdcf7f)
+
+Second execute this template using the argo API REST like this
+
+```
+curl -X POST https://localhost:2746/api/v1/workflows/argo/submit --insecure -H "Authorization: $ARGO_TOKEN" -d '{"namespace": "argo", "resourceKind": "WorkflowTemplate", "resourceName": "arm-hello-world"}'
+{"metadata":{"name":"arm-hello-world-mrcbm","generateName":"arm-hello-world-","namespace":"argo","uid":"827d2664-1961-4d5c-8374-dd900cf9f675","resourceVersion":"481424","generation":1,"creationTimestamp":"2024-03-16T16:16:01Z","labels":{"workflows.argoproj.io/creator":"system-serviceaccount-argo-argo","workflows.argoproj.io/workflow-template":"arm-hello-world"},"managedFields":[{"manager":"argo","operation":"Update","apiVersion":"argoproj.io/v1alpha1","time":"2024-03-16T16:16:01Z","fieldsType":"FieldsV1","fieldsV1":{"f:metadata":{"f:generateName":{},"f:labels":{".":{},"f:workflows.argoproj.io/creator":{},"f:workflows.argoproj.io/workflow-template":{}}},"f:spec":{},"f:status":{}}}]},"spec":{"arguments":{},"workflowTemplateRef":{"name":"arm-hello-world"}},"status":{"startedAt":null,"finishedAt":null,"storedTemplates":{"namespaced/arm-hello-world/echotest":{"name":"echotest","inputs":{},"outputs":{},"metadata":{},"container":{"name":"","image":"alpine","command":["sh","-c"],"args":["echo","hello"],"resources":{}}}}}}
+```
+
+## Some links
+
 The API documentation for this request can be check from the Argo UI like this:
 
 ![Items (1)](https://github.com/masalinas/poc-argo-workflow/assets/1216181/304c0834-ffbc-4cd9-95b2-83074322b11d)
